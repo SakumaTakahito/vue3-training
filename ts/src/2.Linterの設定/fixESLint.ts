@@ -1,5 +1,7 @@
 export class User {
-  constructor(public name: number, public id: number) {
+  name: number
+  id: number
+  constructor(name: number, id: number) {
     this.name = name
     this.id = id
   }
