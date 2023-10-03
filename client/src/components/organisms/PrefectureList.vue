@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "vue"
+import PrefectureCheck from "./PrefectureCheck.vue"
 import axiosInstance from "@/utils/axiosSettings"
 import { PrefectureDisplay } from "@/types/prefecture"
 import { PrefectureResponse } from "@/types/api"
@@ -12,16 +13,16 @@ import { PrefectureResponse } from "@/types/api"
 // })
 
 const prefectures = ref<PrefectureDisplay[]>([
-  {
-    prefCode: 1,
-    prefName: "千葉県",
-    isCheck: true
-  },
-  {
-    prefCode: 2,
-    prefName: "茨城県",
-    isCheck: false
-  }
+  // {
+  //   prefCode: 1,
+  //   prefName: "千葉県",
+  //   isCheck: true
+  // },
+  // {
+  //   prefCode: 2,
+  //   prefName: "茨城県",
+  //   isCheck: false
+  // }
 ])
 
 const uncheckedList = computed(() => {
@@ -39,10 +40,18 @@ onMounted(async () => {
     }
   })
 })
-
-// const check = (bool: boolean) => {
-//   prefecture.value.isCheck = !bool
+// const checkEmits = (p: PrefectureDisplay) => {
+//   prefectures.value.forEach((x) => {
+//     if (x.prefCode === p.prefCode) {
+//       x.isCheck = p.isCheck
+//     }
+//   })
 // }
+
+const checkEmits = (p: PrefectureDisplay, index: number) => {
+  console.log(index)
+  prefectures.value[index].isCheck = p.isCheck
+}
 </script>
 <template>
   <div class="prefecture-container">
@@ -64,11 +73,16 @@ onMounted(async () => {
       <!-- <h1 v-show="prefecture.isCheck">{{ prefecture.isCheck }} show</h1> -->
 
       <!-- TODO: 県を表示してみましょう -->
-      <div v-for="pref in prefectures" :key="pref.prefCode">
-        <input v-model="pref.isCheck" type="checkbox" />
-        {{ pref.prefName }}
+      <div v-for="(pref, index) in prefectures" :key="pref.prefCode">
+        <!-- <input v-model="pref.isCheck" type="checkbox" /> -->
+        <!-- {{ pref.prefName }} -->
+        <PrefectureCheck
+          :prefecture="pref"
+          @check="checkEmits($event, index)"
+        ></PrefectureCheck>
+        {{ pref.isCheck }}
       </div>
-
+      <!-- <PrefectureCheck :prefecture="prefectures[0]"></PrefectureCheck> -->
       <!-- <ul>
         <li v-for="(pref, index) in uncheckedList" :key="index">
           <input v-model="pref.isCheck" type="checkbox" />
